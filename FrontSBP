@@ -3,9 +3,9 @@ import requests
 from datetime import datetime
 
 # Fetch environment variables
-API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsic2NpbSIsInByb3Zpc2lvbmluZyIsInByaXZhdGU6KiIsInNoYXJlZDoqIiwia2IiLCJ0aW06NTYzOTA3MyJdLCJpYXQiOjE3MTc0Mzk5ODYsImlzcyI6ImZyb250Iiwic3ViIjoiMWJkNjBiZTFjMTc1MDVlNjQ0Y2QiLCJqdGkiOiI4MGZmYjk1NDkyM2I2ZDdlIn0.8q5l53xCueU3OU5I0_amFfpk_tgVZ1zNeYeBCeSJqnY'
-INBOX_ID = 'inb_8wrvl' 
-DOWNLOAD_DIR = '/Users/Cash/Desktop/Lumen/FSM/LumenProject/report.xsls'  
+API_TOKEN = 'API'
+INBOX_ID = 'INBOX' 
+DOWNLOAD_DIR = 'DIR'    
 
 if not API_TOKEN:
     raise ValueError("No API token provided. Please set the FRONT_API_TOKEN environment variable.")
