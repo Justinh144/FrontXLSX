@@ -1,0 +1,137 @@
+import requests
+import webbrowser
+import pandas as pd
+from requests_oauthlib import OAuth2Session
+from oauthlib.oauth2 import BackendApplicationClient
+
+# Production
+client_id = ''
+client_secret = ''
+realm_id = ''
+
+redirect_uri = 'https://developer.intuit.com/v2/OAuth2Playground/RedirectUrl'
+scope = 'com.intuit.quickbooks.accounting'
+
+# Takes user to website that generates Auth code
+def get_authorization_code():
+    state = "OR"
+    auth_url = (
+        f"https://appcenter.intuit.com/connect/oauth2?"
+        f"client_id={client_id}&"
+        f"redirect_uri={redirect_uri}&"
+        f"response_type=code&"
+        f"scope={scope}&"
+        f"state={state}"
+    )
+    print("Please go to the following URL and authorize the app:")
+    print(auth_url)
+    webbrowser.open(auth_url)
+    authorization_code = input("Enter the authorization code: ")
+    return authorization_code
+
+# Exchanges Auth code for access token
+def get_access_token(client_id, client_secret, redirect_uri, auth_code):
+    url = 'https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer'
+    headers = {
+        'Content-Type': 'application/x-www-form-urlencoded'
+    }
+    data = {
+        'grant_type': 'authorization_code',
+        'code': auth_code,
+        'redirect_uri': redirect_uri,
+        'client_id': client_id,
+        'client_secret': client_secret
+    }
+    response = requests.post(url, headers=headers, data=data)
+    try:
+        response.raise_for_status()
+        token_response = response.json()
+        return token_response['access_token'], token_response['refresh_token']
+    except requests.exceptions.HTTPError as e:
+        print(f"HTTP error: {e}")
+        print(f"Response content: {response.content}")
+        return None, None
+
+def download_qbo_report(client_id, client_secret, realm_id, access_token, report_id, start_date, end_date, excel_path):
+    url = f"https://quickbooks.api.intuit.com/v3/company/{realm_id}/reports/{report_id}"
+    headers = {
+        'Authorization': f'Bearer {access_token}',
+        'Accept': 'application/json'
+    }
+    params = {
+        'start_date': start_date,
+        'end_date': end_date
+       
+    }
+
+    print(f"Request URL: {url}")
+    print(f"Request Headers: {headers}")
+    print(f"Request Params: {params}")
+
+    response = requests.get(url, headers=headers, params=params)
+
+    print(f"response Status Code: {response.status_code}")
+    print(f"Response Content: {response.content}")
+
+    if response.status_code == 200:
+        response_dict = response.json()
+        report_rows = response_dict.get('Rows', {}).get('Row', [])
+
+        # Initialize an empty list to store rows for the DataFrame
+        data = []
+
+ 
+    
+
+     # Function to extract the desired columns
+        def extract_columns(row):
+            date = ""
+            transaction_type = ""
+            num = ""
+            if 'ColData' in row:
+                for i, col_data in enumerate(row['ColData']):
+                    if i == 0:
+                        date = col_data.get('value', "")
+                    elif i == 1:
+                        transaction_type = col_data.get('value', "")
+                    elif i == 2:
+                        num = col_data.get('value', "")
+            return date, transaction_type, num
+
+        # Parse the main report
+        for row in report_rows:
+            date, transaction_type, num = extract_columns(row)
+            data.append({"Date": date, "Transaction type": transaction_type, "Num": num})
+
+        # Create a DataFrame from the parsed data
+        df = pd.DataFrame(data)
+
+        # Save the DataFrame to an Excel file
+        df.to_excel(excel_path, index=False)
+
+        print("Excel file created successfully.")
+    else:
+        print(f"Failed to retrieve report: {response.status_code} - {response.text}")
+
+def main():
+    # Retrieves authorization code
+    auth_code = get_authorization_code()
+
+    # Exchanges Auth code for access and refresh tokens
+    access_token, refresh_token = get_access_token(client_id, client_secret, redirect_uri, auth_code)
+    
+    if access_token:
+        print(f"Access Token: {access_token}")
+        print(f"Refresh Token: {refresh_token}")
+        print("Downloading the report...")
+        report_id = 'ItemSales'
+        start_date = '2024-03-01' 
+        end_date = '2024-03-31'    
+        excel_path = '/Users/Cash/Desktop/Lumen/FSM/LumenProject/QBReport.xlsx'  
+        download_qbo_report(client_id, client_secret, realm_id, access_token, report_id, start_date, end_date, excel_path)
+        print(f"Excel: {excel_path}")
+    else:
+        print("Failed to obtain access token.")
+
+if __name__ == "__main__":
+    main()
