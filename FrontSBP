@@ -102,13 +102,19 @@ def add_to_master_workbook(download_file_path, master_file_path):
 
     # Create new sheet and copy data
     new_ws = master_wb.create_sheet(title=new_sheet_title)
+
+    # Reorder to make the new sheet the first tab
+    # Index 0 is the first position, and len(master_wb.sheetnames)-1 gives the index of the newly added sheet
+    sheet_index = master_wb.sheetnames.index(new_sheet_title)
+    master_wb._sheets = [master_wb._sheets[sheet_index]] + master_wb._sheets[:sheet_index] + master_wb._sheets[sheet_index+1:]
+
     for row in downloaded_ws.iter_rows(values_only=True):
         new_ws.append(row)
 
     # Save and close the workbook
     master_wb.save(master_file_path)
     master_wb.close()
-    print(f"Data from {download_file_path} added to {master_file_path} in new sheet '{new_sheet_title}'")
+    print(f"Data from {download_file_path} added to {master_file_path} in new sheet '{new_sheet_title}' at the first tab")
 
 
 
