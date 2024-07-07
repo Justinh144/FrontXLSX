@@ -33,16 +33,16 @@ jobs:
         env:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
-          mkdir -p reports
+          mkdir -p Reports
           python FrontDL.py
 
       - name: List files in reports directory
-        run: ls -l reports
+        run: ls -l Reports
 
       - name: Commit and push changes
         run: |
           git config --global user.name 'github-actions[bot]'
           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-          git add reports/*
+          git add Reports/*
           git commit -m 'Add downloaded Excel report' || echo "No changes to commit"
           git push
