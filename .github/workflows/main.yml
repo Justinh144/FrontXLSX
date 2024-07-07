@@ -1,49 +1,47 @@
-# name: Lumen Report 
+name: Lumen Report 
 
-# on: 
-#   push:
-#     branches:
-#       - main
-#   workflow_dispatch: 
+on:
+  schedule:
+    - cron: '40 8 * * *'
 
-# jobs:
-#   run-script:
-#     runs-on: ubuntu-latest
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
 
-#     steps:
-#       - name: Checkout repository
-#         uses: actions/checkout@v3
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-#       - name: Set up Python
-#         uses: actions/setup-python@v4
-#         with:
-#           python-version: '3.x'
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
 
-#       - name: Check Python version
-#         run: python --version
+      - name: Check Python version
+        run: python --version
 
-#       - name: Install dependencies
-#         run: |
-#           pip install -r requirements.txt
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
 
-#       - name: List installed packages
-#         run: pip list
+      - name: List installed packages
+        run: pip list
 
-#       - name: Run Script
-#         run: |
-#           mkdir -p Reports
-#           python FrontDL.py
+      - name: Run Script
+        run: |
+          mkdir -p Reports
+          python FrontDL.py
 
-#       - name: List files in reports directory
-#         run: ls -l Reports
+      - name: List files in reports directory
+        run: ls -l Reports
 
-#       - name: Commit and push changes
-#         env:
-#           GH_PAT: ${{secrets.GH_PAT}}
-#         run: |
-#           git config --global user.name 'github-actions[bot]'
-#           git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
-#           git add Reports/*
-#           git commit -m 'Add downloaded Excel report' || echo "No changes to commit"
-#           git push https://x-access-token:${{secrets.GH_PAT}}@github.com/JustinH144/FrontExcel.git HEAD:main
+      - name: Commit and push changes
+        env:
+          GH_PAT: ${{secrets.GH_PAT}}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Reports/*
+          git commit -m 'Add downloaded Excel report' || echo "No changes to commit"
+          git push https://x-access-token:${{secrets.GH_PAT}}@github.com/JustinH144/FrontExcel.git HEAD:main
 
