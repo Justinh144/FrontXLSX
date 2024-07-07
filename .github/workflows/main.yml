@@ -2,7 +2,7 @@ name: Lumen Report
 
 on:
   schedule:
-    - cron: '42 18 * * *' # 5:05 PM UTC
+    - cron: '10 19 * * *' # 5:05 PM UTC
   workflow_dispatch:
 
 jobs:
