@@ -26,7 +26,10 @@ jobs:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
           mkdir -p reports
-          python FrontDL.py
+          python ./FrontDL.py
+
+      - name: List files in reports directory
+        run: ls -l reports
 
       - name: Commit and push changes
         run: |
