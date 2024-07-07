@@ -1,34 +1,40 @@
-name: Lumen Report 
+name: Download Excel Report
 
-on: 
-  push:
-    branches:
-      - main
-    workflow_dispatch: 
+on:
+  workflow_dispatch:  # Allows manual triggering of the workflow
 
 jobs:
-  run-script:
+  download_report:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v3
+        uses: actions/checkout@v2
 
       - name: Set up Python
-        uses: actions/setup-python@v4
+        uses: actions/setup-python@v2
         with:
           python-version: '3.x'
 
-      - name: Check Python version
-        run: python --version
-
       - name: Install dependencies
         run: |
-          pip install -r requirements.txt
+          python -m pip install --upgrade pip
+          pip install requests
 
-      - name: List installed packages
-        run: pip list
-
-      - name: Run Script
+      - name: Run download script
+        env:
+          API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
-          python FrontExcel/FrontDL.py
+          mkdir -p reports
+          python ./FrontExcel/FrontDL.py
+
+      - name: List files in reports directory
+        run: ls -l reports
+
+      - name: Commit and push changes
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add reports/*
+          git commit -m 'Add downloaded Excel report' || echo "No changes to commit"
+          git push
