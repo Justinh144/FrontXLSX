@@ -26,7 +26,7 @@ jobs:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
           mkdir -p reports
-          python download_excel_from_conversation.py
+          python FrontDL.py
 
       - name: Commit and push changes
         run: |
