@@ -2,7 +2,7 @@ name: Lumen Report2
 
 on:
   schedule:
-    - cron: '15 9 * * *'
+    - cron: '47 9 * * *'
 
 jobs:
   run-script:
