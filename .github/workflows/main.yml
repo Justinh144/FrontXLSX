@@ -1,0 +1,34 @@
+name: Lumen Report 
+
+on: 
+  push:
+    branches:
+      - main
+    workflow_dispatch: 
+
+jobs:
+  run-script:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Check Python version
+        run: python --version
+
+      - name: Install dependencies
+        run: |
+          pip install -r requirements.txt
+
+      - name: List installed packages
+        run: pip list
+
+      - name: Run Script
+        run: |
+          python LumenProject/FrontDL.py

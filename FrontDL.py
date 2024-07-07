@@ -75,7 +75,7 @@ def download_attachment(api_token, attachment, save_dir):
 def main():
     api_token = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsic2NpbSIsInByb3Zpc2lvbmluZyIsInByaXZhdGU6KiIsInNoYXJlZDoqIiwia2IiLCJ0aW06NTYzOTA3MyJdLCJpYXQiOjE3MTc0Mzk5ODYsImlzcyI6ImZyb250Iiwic3ViIjoiMWJkNjBiZTFjMTc1MDVlNjQ0Y2QiLCJqdGkiOiI4MGZmYjk1NDkyM2I2ZDdlIn0.8q5l53xCueU3OU5I0_amFfpk_tgVZ1zNeYeBCeSJqnY'
     convo_id = '101025750618'
-    save_dir = 'reports'
+    save_dir = 'Reports'
     sys.stdout.reconfigure(encoding='utf-8')
     conversation = get_conversation(api_token, convo_id)
     if not conversation:
