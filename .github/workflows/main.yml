@@ -31,7 +31,7 @@ jobs:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
           mkdir -p reports
-          python ./FrontExcel/FrontDL.py
+          python /FrontExcel/FrontDL.py
 
       - name: List files in reports directory
         run: ls -l reports
