@@ -21,6 +21,11 @@ jobs:
           python -m pip install --upgrade pip
           pip install requests
 
+      - name: Verify repository structure
+        run: |
+          echo "Verifying repository structure..."
+          ls -R
+
       - name: Run download script
         env:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
