@@ -1,8 +1,10 @@
 name: Lumen Report 
 
-on:
-  schedule:
-    - cron: '45 8 * * *'
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
 
 jobs:
   run-script:
