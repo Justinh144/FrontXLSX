@@ -1,37 +1,40 @@
-name: Download Excel Report
+name: Lumen Report 
 
-on:
-  workflow_dispatch:  # Allows manual triggering of the workflow
+on: 
+  push:
+    branches:
+      - main
+  workflow_dispatch: 
 
 jobs:
-  download_report:
+  run-script:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       - name: Set up Python
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v4
         with:
           python-version: '3.x'
 
+      - name: Check Python version
+        run: python --version
+
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
-          pip install requests
+          pip install -r requirements.txt
 
-      - name: Verify repository structure
-        run: |
-          echo "Verifying repository structure..."
-          ls -R
+      - name: List installed packages
+        run: pip list
 
-      - name: Run download script
+      - name: Run Script
         env:
           API_TOKEN: ${{ secrets.FRONT_API_TOKEN }}
         run: |
           mkdir -p reports
-          python /FrontExcel/FrontDL.py
+          python FrontExcel/FrontDL.py
 
       - name: List files in reports directory
         run: ls -l reports
