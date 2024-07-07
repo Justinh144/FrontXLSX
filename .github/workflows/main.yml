@@ -1,11 +1,8 @@
 name: Lumen Report
 
 on:
-  push:
-    branches:
-      - main
   schedule:
-    - cron: '58 16 * * *'
+    - cron: '05 17 * * *' # 5:05 PM UTC
   workflow_dispatch:
 
 jobs:
