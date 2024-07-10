@@ -1,36 +1,55 @@
-name: CI
+name: Lumen Report
 
 on:
+  schedule:
+    - cron: '15 18 * * *' # 5:05 PM UTC
   workflow_dispatch:
-  
+
 jobs:
-  build:
+  run-script:
     runs-on: ubuntu-latest
 
-    strategy:
-      matrix:
-        python-version: [3.7, 3.8, 3.9, 3.10]
-
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      - name: Checkout repository
+        uses: actions/checkout@v3
 
-      - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+      - name: Set up Python
+        uses: actions/setup-python@v4
         with:
-          python-version: ${{ matrix.python-version }}
+          python-version: '3.x'
+
+      - name: Check Python version
+        run: python --version
 
       - name: Install dependencies
         run: |
-          python -m pip install --upgrade pip
           pip install -r requirements.txt
 
-      - name: Lint with flake8
-        run: |
-          pip install flake8
-          flake8 .
+      - name: List installed packages
+        run: pip list
 
-      - name: Run tests
+      - name: Run Script
         run: |
-          pip install pytest
-          pytest
+          mkdir -p Reports
+          python FrontDL.py
+
+      - name: List files in reports directory
+        run: ls -l Reports
+
+      - name: Commit and push changes
+        env:
+          GH_PAT: ${{ secrets.GH_PAT }}
+        run: |
+          git config --global user.name 'github-actions[bot]'
+          git config --global user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add Reports/*
+          git commit -m 'Add downloaded Excel report' || echo "No changes to commit"
+          git push https://x-access-token:${{ secrets.GH_PAT }}@github.com/JustinH144/FrontExcel.git HEAD:main
+
+      - name: Send email with report
+        env:
+          EMAIL_ADDRESS: ${{ secrets.EMAIL_ADDRESS }}
+          EMAIL_PASSWORD: ${{ secrets.EMAIL_PASSWORD }}
+          TO_EMAIL: ${{ secrets.TO_EMAIL }}
+        run: |
+            python SendReports.py 
