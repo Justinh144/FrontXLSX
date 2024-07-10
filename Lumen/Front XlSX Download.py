@@ -7,7 +7,7 @@ from datetime import datetime
 # Fetch environment variables
 API_TOKEN = 'eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZXMiOlsic2NpbSIsInByb3Zpc2lvbmluZyIsInNoYXJlZDoqIiwicHJpdmF0ZToqIiwia2IiLCJ0aW06NTYzOTA3MyJdLCJpYXQiOjE3MjA2MzE2MDQsImlzcyI6ImZyb250Iiwic3ViIjoiMWJkNjBiZTFjMTc1MDVlNjQ0Y2QiLCJqdGkiOiJmYTE3ZmM3NGM3Y2EyZTBmIn0.0indI8nPShOUVncJojMcilUp4NDTUYy3HLmYABLNRPw'
 INBOX_ID = 'inb_8wrvl'
-DOWNLOAD_DIR = '/Users/cash/desktop/FrontExcel/Lumen/'
+DOWNLOAD_DIR = 'Reports'
 # Downloads/
 
 if not API_TOKEN:
