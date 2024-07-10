@@ -31,7 +31,7 @@ jobs:
       - name: Run Script
         run: |
           mkdir -p Reports
-          python FrontDL.py
+          python Front XLSX Download.py
 
       - name: List files in reports directory
         run: ls -l Reports
