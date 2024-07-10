@@ -33,7 +33,7 @@ jobs:
 
       - name: Run Script
         run: python Front\ XLSX\ Download.py
-        working-directory: Lumen
+        working-directory: FrontXLSX
 
       - name: List files in reports directory
         run: ls -l Lumen/Reports
