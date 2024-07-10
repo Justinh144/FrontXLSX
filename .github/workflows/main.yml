@@ -31,7 +31,8 @@ jobs:
       - name: Run Script
         run: |
           mkdir -p Reports
-          python ../Lumen/Front\ XLSX\ Download.py
+          python Lumen/Front\ XLSX\ Download.py
+          working-directory: ${{ github.workspace }}
 
       - name: List files in reports directory
         run: ls -l Reports
