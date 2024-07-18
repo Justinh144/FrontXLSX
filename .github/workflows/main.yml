@@ -32,7 +32,7 @@ jobs:
         run: mkdir -p Reports
 
       - name: Run Script
-        run: python "Lumen/Front XLSX Download.py"
+        run: python "Lumen/FrontDL.py"
 
       - name: List files in reports directory
         run: ls -l Reports
