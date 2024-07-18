@@ -2,7 +2,7 @@ name: Lumen Report
 
 on:
   schedule:
-    - cron: '30 13 * * *' # 1:30 UTC = 6:30 am PDT 
+    - cron: '30 13 * * *' # 6:30 AM PDT (1:30 PM UTC)
   workflow_dispatch:
 
 jobs:
@@ -36,6 +36,13 @@ jobs:
 
       - name: List files in reports directory
         run: ls -l Reports
+
+      - name: Verify Reports directory contents
+        run: |
+          if [ -z "$(ls -A Reports)" ]; then
+            echo "No files found in Reports directory"
+            exit 1
+          fi
 
       - name: Commit and push changes
         env:
